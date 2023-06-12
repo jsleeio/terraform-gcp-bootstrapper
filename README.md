@@ -127,18 +127,20 @@ git clone git@github.com:jsleeio/terraform-gcp-bootstrapper.git
 
 2. clone your new experiment's repository (adjust names accordingly)
 
-    cd "$HOME/repo"
-    git clone git@github.com:example/tf-gcp-experiment
-    cd tf-gcp-experiment
+```
+cd "$HOME/repo"
+git clone git@github.com:example/tf-gcp-experiment
+cd tf-gcp-experiment
+```
 
 3. run it from within your new repo somewhere, and give it a name to use for
-   the new GCP project it will create for your experiment:
+   the new GCP project it will create for your experiment. My preference is to
+   use the same name for repository and project.
 
 ```
 $HOME/repo/terraform-gcp-bootstrapper/terraform-gcp-bootstrapper.sh -p YOURPROJECT
 ```
 
-    My preference is to use the same name for repository and project.
 
 4. if all went well, add the example cloudbuild pipeline definition and
    Terraform test file, commit and push:
