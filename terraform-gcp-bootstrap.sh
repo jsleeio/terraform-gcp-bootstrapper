@@ -151,7 +151,7 @@ _must gcloud alpha builds repositories create \
   "$repository_name" \
   --remote-uri="https://github.com/jsleeio/${repository_name}.git" \
   --connection=github-cloudbuild \
-  --region=us-west2
+  --region="$region"
 
 # more notes: https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen
 #
