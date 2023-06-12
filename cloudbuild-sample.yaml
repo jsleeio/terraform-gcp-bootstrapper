@@ -6,9 +6,7 @@ steps:
   args:
     - 'init'
     - '-backend=true'
-    - '-backend-config=region=${LOCATION}'
     - '-backend-config=bucket=terraform-state-${PROJECT_ID}'
-    - '-backend-config=key=terraform.tfstate'
     # unlike AWS S3 backend, no need for locking table as GCS alone is enough
 
 - id: 'plan'

@@ -143,12 +143,13 @@ $HOME/repo/terraform-gcp-bootstrapper/terraform-gcp-bootstrapper.sh -p YOURPROJE
 
 
 4. if all went well, add the example cloudbuild pipeline definition and
-   Terraform test file, commit and push:
+   Terraform test files, commit and push:
 
 ```
 cp $HOME/repo/terraform-gcp-bootstrapper/cloudbuild-sample.yaml cloudbuild.yaml
+cp $HOME/repo/terraform-gcp-bootstrapper/terraform.tf terraform.tf
 cp $HOME/repo/terraform-gcp-bootstrapper/output-greeting.tf output-greeting.tf
-git add cloudbuild.yaml output-greeting.tf
+git add cloudbuild.yaml terraform.tf output-greeting.tf
 git commit -m 'initial setup'
 git push
 ```
