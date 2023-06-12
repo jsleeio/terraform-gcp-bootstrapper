@@ -1,0 +1,24 @@
+steps:
+- id: 'init'
+  name: 'hashicorp/terraform:1.4.6'
+  env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
+  entrypoint: 'terraform'
+  args:
+    - 'init'
+    - '-backend=true'
+    - '-backend-config=region=${LOCATION}'
+    - '-backend-config=bucket=terraform-state-${PROJECT_ID}'
+    - '-backend-config=key=terraform.tfstate'
+    # unlike AWS S3 backend, no need for locking table as GCS alone is enough
+
+- id: 'plan'
+  name: 'hashicorp/terraform:1.4.6'
+  env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
+  entrypoint: 'terraform'
+  args: [ 'plan', '-lock=true' ]
+
+- id: 'apply'
+  name: 'hashicorp/terraform:1.4.6'
+  env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
+  entrypoint: 'terraform'
+  args: [ 'apply', '-lock=true', '-auto-approve' ]
