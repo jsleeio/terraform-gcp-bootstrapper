@@ -13,10 +13,10 @@ steps:
   name: 'hashicorp/terraform:1.4.6'
   env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
   entrypoint: 'terraform'
-  args: [ 'plan', '-lock=true' ]
+  args: [ 'plan', '-lock=true', '-out=/workspace/${BUILD_ID}.${SHORT_SHA}.plan' ]
 
 - id: 'apply'
   name: 'hashicorp/terraform:1.4.6'
   env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
   entrypoint: 'terraform'
-  args: [ 'apply', '-lock=true', '-auto-approve' ]
+  args: [ 'apply', '-lock=true', '-auto-approve', '/workspace/${BUILD_ID}.${SHORT_SHA}.plan' ]
