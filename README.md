@@ -2,15 +2,14 @@
 
 ## what is this?
 
-This shell script automates many boring setup bits for Github + GCP Cloud Build
-+ Terraform, so you can get to work on your actual idea much faster.
+This shell script automates many boring setup bits for Github, GCP Cloud Build
+and Terraform, so you can get to work on your actual idea much faster.
 
 You supply:
 
 * a Github repository
-* a Github personal access token (details below)
+* a Github personal access token (details and opinions below)
 * the application ID for Google Cloud Build once you've set it up in your Github account
-* a Cloud Build pipeline definition (you can copy the example from this project verbatim)
 
 It will setup in GCP:
 
@@ -21,6 +20,12 @@ It will setup in GCP:
 * a Github repository connection in Cloud Build
 * a git branch push trigger in Cloud Build
 * various IAM bits to make it all work
+
+You can copy verbatim from here to your repository:
+
+* Cloud Build sample pipeline that runs Terraform and stores state in the state bucket
+* a Terraform backend definition, because you need one and why type it every time?
+* a "Hello, world" Terraform output definition to give it something to chew on
 
 Perfect for quick experiments and prototypes.
 
@@ -43,6 +48,12 @@ gcloud config set project SOMEOTHERPROJECT
 
 ... while it is still creating resources in your new project. So it should be
 pretty safe, but ... ultimately the responsibility rests with you.
+
+## YOU are responsible for your Github account and access token security!
+
+Audit your tokens regularly and consider how and where they are used. Consider
+creating them with expiry dates, knowing of course that if you do your pipeline
+will eventually stop working.
 
 ## Install dependencies
 
