@@ -37,7 +37,9 @@ implementation is designed to fail fast if anything doesn't look right, and all
 resources are created in a new project (and it attempts to avoid accidentally
 creating them in another project, such as if you happened to run...
 
-    gcloud config set project SOMEOTHERPROJECT
+```
+gcloud config set project SOMEOTHERPROJECT
+```
 
 ... while it is still creating resources in your new project. So it should be
 pretty safe, but ... ultimately the responsibility rests with you.
@@ -59,7 +61,9 @@ to install the optional `alpha` components, as some of the Cloud Build
 features, and also the ability to link a project to a billing account, are not
 yet in the general release version of `gcloud`.
 
-    gcloud components install alpha
+```
+gcloud components install alpha
+```
 
 Note that these are `alpha` components and should be treated as such.
 
@@ -72,7 +76,9 @@ Once added, go to your [application settings page](https://github.com/settings/i
 and copy the Configure button's link for the Google Cloud Build application. It
 should look like this
 
-    https://github.com/settings/installations/38510777
+```
+https://github.com/settings/installations/38510777
+```
 
 You only just the number at the end. It will be a different number to the above
 example.
@@ -81,9 +87,11 @@ Put it (use your number, not mine!) in a file
 `$HOME/shell-secrets/tokens/github/cloudbuild_install_id`, and protect the
 directory from snooping other users, if any:
 
-    $ mkdir -p "$HOME/shell-secrets/tokens/github/"
-    $ chmod 700 "$HOME/shell-secrets/tokens/github/"
-    $ echo 38510777 > "$HOME/shell-secrets/tokens/github/cloudbuild_install_id"
+```
+mkdir -p "$HOME/shell-secrets/tokens/github/"
+chmod 700 "$HOME/shell-secrets/tokens/github/"
+echo 38510777 > "$HOME/shell-secrets/tokens/github/cloudbuild_install_id"
+```
 
 That's it!
 
@@ -112,8 +120,10 @@ That's it!
 
 1. clone this repository somewhere
 
-    cd "$HOME/repo"
-    git clone git@github.com:jsleeio/terraform-gcp-bootstrapper.git
+```
+cd "$HOME/repo"
+git clone git@github.com:jsleeio/terraform-gcp-bootstrapper.git
+```
 
 2. clone your new experiment's repository (adjust names accordingly)
 
@@ -124,18 +134,22 @@ That's it!
 3. run it from within your new repo somewhere, and give it a name to use for
    the new GCP project it will create for your experiment:
 
-    $HOME/repo/terraform-gcp-bootstrapper/terraform-gcp-bootstrapper.sh -p YOURPROJECT
+```
+$HOME/repo/terraform-gcp-bootstrapper/terraform-gcp-bootstrapper.sh -p YOURPROJECT
+```
 
     My preference is to use the same name for repository and project.
 
 4. if all went well, add the example cloudbuild pipeline definition and
    Terraform test file, commit and push:
 
-    cp $HOME/repo/terraform-gcp-bootstrapper/cloudbuild-sample.yaml cloudbuild.yaml
-    cp $HOME/repo/terraform-gcp-bootstrapper/output-greeting.tf output-greeting.tf
-    git add cloudbuild.yaml output-greeting.tf
-    git commit -m 'initial setup'
-    git push
+```
+cp $HOME/repo/terraform-gcp-bootstrapper/cloudbuild-sample.yaml cloudbuild.yaml
+cp $HOME/repo/terraform-gcp-bootstrapper/output-greeting.tf output-greeting.tf
+git add cloudbuild.yaml output-greeting.tf
+git commit -m 'initial setup'
+git push
+```
 
 5. go into the Cloud Build console in your new project. Was a build triggered?
    Did it work? Did you get a greeting in the log?
