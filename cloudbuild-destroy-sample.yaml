@@ -9,14 +9,8 @@ steps:
     - '-backend-config=bucket=terraform-state-${PROJECT_ID}'
     # unlike AWS S3 backend, no need for locking table as GCS alone is enough
 
-- id: 'plan'
+- id: 'destroy'
   name: 'hashicorp/terraform:1.5'
   env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
   entrypoint: 'terraform'
-  args: [ 'plan', '-lock=true', '-out=/workspace/${BUILD_ID}.${SHORT_SHA}.plan' ]
-
-- id: 'apply'
-  name: 'hashicorp/terraform:1.5'
-  env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
-  entrypoint: 'terraform'
-  args: [ 'apply', '-lock=true', '-auto-approve', '/workspace/${BUILD_ID}.${SHORT_SHA}.plan' ]
+  args: [ 'apply', '-destroy', '-lock=true', '-auto-approve' ]

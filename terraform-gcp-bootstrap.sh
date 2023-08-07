@@ -165,8 +165,63 @@ _must gcloud alpha builds repositories create \
 #
 # fucken hell google
 _must gcloud alpha builds triggers create github \
-  --name=iac-gcp-serverless \
+  --name="${repository_name}-deploy" \
   --repository="projects/${project}/locations/${region}/connections/github-cloudbuild/repositories/${repository_name}" \
   --branch-pattern='^main$' \
   --build-config=cloudbuild.yaml \
   --region="$region"
+
+_must gcloud alpha builds triggers create manual \
+  --name="${repository_name}-deploy-manual" \
+  --repository="projects/${project}/locations/${region}/connections/github-cloudbuild/repositories/${repository_name}" \
+  --build-config=cloudbuild.yaml \
+  --region="${region}" \
+  --branch=main
+
+_must gcloud alpha builds triggers create manual \
+  --name="${repository_name}-destroy" \
+  --repository="projects/${project}/locations/${region}/connections/github-cloudbuild/repositories/${repository_name}" \
+  --build-config=cloudbuild-destroy.yaml \
+  --region="${region}" \
+  --branch=main
+
+echo "creating: trigger-deploy.sh"
+printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s\n' \
+  "${repository_name}-deploy-manual" "${region}" > trigger-deploy.sh
+
+echo "creating: trigger-destroy.sh"
+printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s\n' \
+  "${repository_name}-destroy" "${region}" > trigger-destroy.sh
+chmod 755 trigger-deploy.sh trigger-destroy.sh
+
+echo "creating: terraform.tf"
+(
+  echo "# most configuration here is passed into 'terraform init' instead" ; \
+  echo '' ; \
+  echo 'terraform {' ; \
+  echo '  backend "gcs" {}' ; \
+  echo '}'
+) > terraform.tf
+
+echo "creating: outputs.tf"
+(
+  echo 'output "greeting" {' ; \
+  echo '  value = "Hello, world!"' ; \
+  echo '}'
+) > outputs.tf
+
+founddeployyaml=no
+if sourcedir="$(dirname "$0")" ; then
+  if cp "$sourcedir/cloudbuild-sample.yaml" cloudbuild.yaml ; then
+    founddeployyaml=yes
+  fi
+  if cp "$sourcedir/cloudbuild-destroy-sample.yaml" cloudbuild-destroy.yaml ; then
+    founddestroyyaml=yes
+  fi
+fi
+if [ "$founddeployyaml" = "no" ] ; then
+  echo "WARNING: you will need to supply cloudbuild.yaml as I can't find it"
+fi
+if [ "$founddestroyyaml" = "no" ] ; then
+  echo "WARNING: you will need to supply cloudbuild-destroy.yaml as I can't find it"
+fi

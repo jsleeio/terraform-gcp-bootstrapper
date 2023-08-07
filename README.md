@@ -18,14 +18,23 @@ It will setup in GCP:
 * a Secret in Secret Manager for your Github personal access token
 * a Github platform connection in Cloud Build
 * a Github repository connection in Cloud Build
-* a git branch push trigger in Cloud Build
+* three Cloud Build triggers:
+  * on branch push, run a Terraform plan+apply
+  * on manual trigger, run a Terraform plan+apply
+  * on manual trigger, run a Terraform destroy
 * various IAM bits to make it all work
 
-You can copy verbatim from here to your repository:
+Some files will be added to the repository:
 
-* Cloud Build sample pipeline that runs Terraform and stores state in the state bucket
 * a Terraform backend definition, because you need one and why type it every time?
+* scripts to invoke the manual deploy & destroy triggers
 * a "Hello, world" Terraform output definition to give it something to chew on
+
+Some files will be copied from wherever `terraform-gcp-bootstrapper.sh` is, if
+they exist there, otherwise you'll need to copy them yourself:
+
+* Cloud Build deploy pipeline YAML that runs Terraform and stores state in the state bucket
+* Cloud Build destroy pipeline YAML that runs Terraform and stores state in the state bucket
 
 Perfect for quick experiments and prototypes.
 
@@ -152,15 +161,12 @@ cd tf-gcp-experiment
 $HOME/repo/terraform-gcp-bootstrapper/terraform-gcp-bootstrapper.sh -p YOURPROJECT
 ```
 
-
-4. if all went well, add the example cloudbuild pipeline definition and
-   Terraform test files, commit and push:
+4. if all went well, some files should have been created in your repository.
+   If the Cloud Build YAML files aren't there, you'll need to copy them from
+   this repository, removing `-sample` from their names.
 
 ```
-cp $HOME/repo/terraform-gcp-bootstrapper/cloudbuild-sample.yaml cloudbuild.yaml
-cp $HOME/repo/terraform-gcp-bootstrapper/terraform.tf terraform.tf
-cp $HOME/repo/terraform-gcp-bootstrapper/output-greeting.tf output-greeting.tf
-git add cloudbuild.yaml terraform.tf output-greeting.tf
+git add .
 git commit -m 'initial setup'
 git push
 ```
