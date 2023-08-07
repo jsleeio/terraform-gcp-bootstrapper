@@ -1,6 +1,6 @@
 steps:
 - id: 'init'
-  name: 'hashicorp/terraform:1.4.6'
+  name: 'hashicorp/terraform:1.5'
   env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
   entrypoint: 'terraform'
   args:
@@ -10,7 +10,7 @@ steps:
     # unlike AWS S3 backend, no need for locking table as GCS alone is enough
 
 - id: 'plan'
-  name: 'hashicorp/terraform:1.4.6'
+  name: 'hashicorp/terraform:1.5'
   env: [ 'GCLOUD_PROJECT=${PROJECT_ID}', 'GCLOUD_REGION=${LOCATION}' ]
   entrypoint: 'terraform'
   args: [ 'plan', '-lock=true', '-out=/workspace/${BUILD_ID}.${SHORT_SHA}.plan' ]
