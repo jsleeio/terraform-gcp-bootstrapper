@@ -110,9 +110,15 @@ _must gcloud alpha billing projects link \
 # makes the gsutil bits easier
 _must gcloud config set project "$project"
 
+# enable some APIs. we don't strictly need iam or cloudresourcemanager here but
+# iam is almost certainly going to be needed in the experiment, and
+# cloudresourcemanager is required for the `google_project` datasource which is
+# also likely to be required. So do it upfront
 _must gcloud services enable \
   cloudbuild.googleapis.com \
+  cloudresourcemanager.googleapis.com \
   compute.googleapis.com \
+  iam.googleapis.com \
   secretmanager.googleapis.com \
   storage.googleapis.com \
   --project="$project"
