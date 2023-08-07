@@ -186,12 +186,12 @@ _must gcloud alpha builds triggers create manual \
   --branch=main
 
 echo "creating: trigger-deploy.sh"
-printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s\n' \
-  "${repository_name}-deploy-manual" "${region}" > trigger-deploy.sh
+printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s --project=%s\n' \
+  "${repository_name}-deploy-manual" "${region}" "${project}" > trigger-deploy.sh
 
 echo "creating: trigger-destroy.sh"
-printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s\n' \
-  "${repository_name}-destroy" "${region}" > trigger-destroy.sh
+printf '#!/bin/sh\n\ngcloud builds triggers run %s --region=%s --project=%s\n' \
+  "${repository_name}-destroy" "${region}" "${project}" > trigger-destroy.sh
 chmod 755 trigger-deploy.sh trigger-destroy.sh
 
 echo "creating: terraform.tf"
